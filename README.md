@@ -20,22 +20,7 @@ The core idea is **agent separation of concerns**:
 
 ### Graph Structure
 
-```mermaid
-graph TD
-    Start((START)) --> Researcher[🔍 Researcher Node]
-    Researcher --> Critic{⚖️ Critic Node}
-
-    %% Reflection Loop
-    Critic -- "FAIL: Gaps Found" --> Researcher
-
-    %% Successful Path
-    Critic -- "PASS: Satisfactory" --> Writer[✍️ Writer Node]
-    Writer --> End((END))
-
-    style Researcher fill:#f9f,stroke:#333
-    style Critic fill:#fff4dd,stroke:#d4a017
-    style Writer fill:#bbf,stroke:#333
-
+![structure](screenshot.png)
 ## ⚡ Key Innovations
 
 ### 🔁 Self-Correction Loop
@@ -91,13 +76,13 @@ This results in **significantly reduced token usage** during multi-iteration res
 ### 1️⃣ Prerequisites
 ```bash
 pip install -U langgraph langchain-groq ddgs python-dotenv
-
+```
 ###2️⃣ Environment Setup
 
 Create a .env file in the project root:
 ```bash
 GROQ_API_KEY=your_key_here
-
+```
 3️⃣ Run the System
 python main.py
 
