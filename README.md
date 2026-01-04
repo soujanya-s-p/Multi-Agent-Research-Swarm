@@ -20,7 +20,11 @@ The core idea is **agent separation of concerns**:
 
 ### Graph Structure
 
-![structure](screenshot.png)
+![structure](Screenshot.png)
+
+### Output
+
+![Output](Animation.gif)
 ## ⚡ Key Innovations
 
 ### 🔁 Self-Correction Loop
@@ -29,6 +33,12 @@ Implements a **Critic-as-Auditor** pattern that evaluates LLM-generated research
 - Completeness
 - Technical accuracy
 - Quality thresholds
+
+![Self-correction loop](Animation-1.gif)
+
+1. The Trigger: You enter a "Stress Test" query ("Compare every EV...").
+2. The Decision: The Critic analyzed the first batch of results and realized "every EV" wasn't found yet.
+3. The Loop: Instead of ending, the logs show the Researcher starting again
 
 If gaps, inaccuracies, or weak reasoning are detected, the system **automatically loops back** to the Researcher node for refinement.
 
@@ -40,6 +50,24 @@ Uses **LangGraph persistence (`MemorySaver`)** to:
 - Maintain session state
 - Resume interrupted workflows
 - Avoid redundant API calls across iterations
+
+![Attempt-1](Attempt-1.png)
+
+### 1️⃣ The Interruption (Attempt 1)
+In the first log, the system was manually killed (Ctrl+C) while the Critic Node was making an API call to Groq.
+
+What happened: The researcher had finished, and the state was saved. The interruption occurred during the "Audit" phase.
+
+Result: In a traditional "Chain," this would result in a total loss of the gathered research.
+
+![Attempt-2](Attempt-2.png)
+
+### 2️⃣ The Autonomous Recovery (Attempt 2)
+Upon restarting the script with the same thread_id, the system successfully bypassed the redundant "Researcher" phase and moved directly to synthesizing the report.
+
+Evidence of Efficiency: Notice that in the second run, the system immediately picked up from where it left off.
+
+Final Output: The swarm successfully delivered a multi-perspective report on E-waste, including data from the World Health Organization (WHO) and the Global E-waste Monitor 2024.
 
 This results in **significantly reduced token usage** during multi-iteration research cycles.
 
@@ -77,16 +105,18 @@ This results in **significantly reduced token usage** during multi-iteration res
 ```bash
 pip install -U langgraph langchain-groq ddgs python-dotenv
 ```
-###2️⃣ Environment Setup
+### 2️⃣ Environment Setup
 
 Create a .env file in the project root:
 ```bash
 GROQ_API_KEY=your_key_here
 ```
 3️⃣ Run the System
+```bash
 python main.py
-
-📝 Performance Reflection
+```
+---
+### 📝 Performance Reflection
 
 During testing:
 
@@ -98,16 +128,22 @@ Resulted in an average 2.5× increase in factual density
 
 Significantly reduced speculative or weak claims compared to single-pass LLM outputs
 
-🌟 Why This Project Is Flagship-Ready
 
-✔ Persistent — Uses LangGraph checkpointers to save state
-✔ Cyclic — Demonstrates advanced agentic feedback loops
-✔ Efficient — Runs on Groq LPUs for fastest inference available
-✔ Production-Oriented — Designed to scale beyond toy demos
+---
+
+### 🌟 Why This Project Is Flagship-Ready
+
+1. Persistent — Uses LangGraph checkpointers to save state
+2. Cyclic — Demonstrates advanced agentic feedback loops
+3. Efficient — Runs on Groq LPUs for fastest inference available
+4. Production-Oriented — Designed to scale beyond toy demos
+
 
 This project alone is sufficient to demonstrate real-world Agentic AI system design in interviews and technical evaluations.
 
-📌 Use Cases
+---
+
+### 📌 Use Cases
 
 Automated technical research
 
@@ -118,3 +154,6 @@ Policy or compliance analysis
 Market intelligence
 
 AI reliability & hallucination mitigation studies
+
+---
+ 
